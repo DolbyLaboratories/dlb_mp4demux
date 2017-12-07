@@ -14,7 +14,7 @@ v1.0, 01 Jul 2017, Initial Version
    - This file.
 
   ./make/
-    - Library project files.
+   - Library project files.
 
   ./include/
    - Public header files of the 'mp4d' library.
@@ -78,16 +78,3 @@ v1.0, 01 Jul 2017, Initial Version
 ## KNOWN LIMITATIONS/ISSUES
 
 None
-
-## DIAGRAM
-
-   *Design UML
-![](doc/design-UML.violet.png)
-
-   *File Function
-![](doc/file_info.png)
-![](doc/file_source.png)
-
-   *Demux or Playback workflow
-![](doc/play.png)
-![](doc/playback.png)
