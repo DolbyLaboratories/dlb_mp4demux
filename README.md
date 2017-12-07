@@ -47,27 +47,27 @@ v1.0, 01 Jul 2017, Initial Version
   * Read and demux the following formats:
       fragmented or unfragmented MP4 File Format(.mp4, .m4a, .m4v)
   * Extract media samples in the following formats:
-   ** Video H.264
-   ** Video H.265
-   ** Video Dolby Vision
-   ** Audio Dolby Digital Plus
-   ** Audio Dolby Digital
-   ** Audio Dolby AC4
-   ** Audio HE AAC v2
+    * Video H.264
+    * Video H.265
+    * Video Dolby Vision
+    * Audio Dolby Digital Plus
+    * Audio Dolby Digital
+    * Audio Dolby AC4
+    * Audio HE AAC v2
   * Support for edit lists if the mapping between CTS and presentation time
     is monotonically increasing.
   * Per sample access to
-   ** Decoding Time Stamp (DTS)
-   ** Composition Time Stamp (CTS)
-   ** Presentation Time Stamp (CTS after applying edit lists)
-   ** Sync sample information
+    * Decoding Time Stamp (DTS)
+    * Composition Time Stamp (CTS)
+    * Presentation Time Stamp (CTS after applying edit lists)
+    * Sync sample information
   * Seeking inside fragments or unfragmented movies
   * Random access to fragments by evaluating 'mfro' and 'mfra' boxes.
   * Provide access to the following metadata
-   ** File type information from 'ftyp' and 'styp' boxes.
-   ** Dolby static metadata.
-   ** ID3v2 metadata as ID3v2 tag from 'moov/meta/ID32' boxes.
-   ** Unfragmented items referenced by 'moov/meta/iloc' and stored in 'moov/meta/idat'.
+    * File type information from 'ftyp' and 'styp' boxes.
+    * Dolby static metadata.
+    * ID3v2 metadata as ID3v2 tag from 'moov/meta/ID32' boxes.
+    * Unfragmented items referenced by 'moov/meta/iloc' and stored in 'moov/meta/idat'.
 
 ## Frontends Sample Code
 
