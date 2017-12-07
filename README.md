@@ -1,14 +1,14 @@
-#DOLBY MP4 STREAMING DEMUXER LIBRARARY
+# DOLBY MP4 STREAMING DEMUXER LIBRARARY
 
 The Dolby MP4 streaming demuxer (dlb_mp4demux) lib is a software implementation
 of a demuxer of fragmented or unfragmented mp4 file format. 
 It is designed for use on architectures with limited resources.
 
-##VERSION HISTORY
+## VERSION HISTORY
 
 v1.0, 01 Jul 2017, Initial Version
 
-##STRUCTURE
+## STRUCTURE
 
   ./README.txt
    - This file.
@@ -37,7 +37,7 @@ v1.0, 01 Jul 2017, Initial Version
   ./test/
    - Contains unit test executables and Unittest system tests of the package.
   
-##Library Features:
+## Library Features:
 
   * Single pass demuxing for fragmented or unfragmented files
   * API providing access to demux, trackreader, and box reader (navigator)
@@ -70,16 +70,16 @@ v1.0, 01 Jul 2017, Initial Version
       ** Unfragmented items referenced by 'moov/meta/iloc' and stored in
         'moov/meta/idat'.
 
-##Frontends Sample Code
+## Frontends Sample Code
 
    mp4demuxer sample frontend to read local fragmented or unfragmented mp4 
    file format and output elementary streams.
  
-##KNOWN LIMITATIONS/ISSUES
+## KNOWN LIMITATIONS/ISSUES
 
 None
 
-##DIAGRAM
+## DIAGRAM
 
    *Design UML
 ![](doc/design-UML.violet.png)
