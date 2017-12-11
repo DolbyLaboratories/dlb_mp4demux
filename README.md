@@ -1,79 +1,49 @@
-# DOLBY MP4 STREAMING DEMUXER LIBRARARY
+# dlb_mp4demux
 
-The Dolby MP4 streaming demuxer (dlb_mp4demux) lib is a software implementation
-of a demuxer of fragmented or unfragmented mp4 file format. 
-It is designed for use on architectures with limited resources.
+The dlb_mp4demux is a library developed by Dolby under the BSD-3 license. The library can cooperate with frontend program to generate a tool to efficiently demultiplex ISO base media file format (aka mp4 container) into elementary streams (including AC3, EC3, AC4 and DoVi).
 
-## VERSION HISTORY
+## Getting Started
 
-v1.0, 01 Jul 2017, Initial Version
+These instructions help you get a copy of the project up and running on your local machine for development and testing purposes.
 
-## STRUCTURE
+### Folder Structure
 
-  ./README.txt
-   - This file.
+The "dlb_mp4demux" folder consists of:
 
-  ./make/
-   - Library project files.
+- README.md        This file.
+- doc/             Doxygen documentation of the dlb_mp4demux.
+- frontend/        MP4Demuxer frontend.
+- include/         Necessary header files of the dlb_mp4demux library.
+- make/            Makefiles and Visual Studio projects/solutions for building the Dolby MP4 demultiplexer library with frontends and test harnesses.
+- src/             Contains the MP4 demultiplexer source code.
+- test/            Test harnesses for unit and developer system tests including test signals.
 
-  ./include/
-   - Public header files of the 'mp4d' library.
-  ./include/mp4d_types.h
-   - mp4d data types used across different layers of the API.
-  ./include/mp4d_demux.h
-  ./include/mp4d_trackreader.h
-   - High level APIs for movie and track access
-  ./include/mp4d_nav.h
-  ./include/mp4d_buffer.h
-   - Low level APIs for atom handling and box parsing.
+### Prerequisites
 
-  ./src/
-   - The source code of the 'mp4d' library.
+For Windows platform development, Visual Studio 2010 must be installed with SP1.
 
-  ./frontend/mp4demuxer.c
-   - Implementation of an MP4 file demuxer tool. It uses the
-     'mp4d' library. It writes media data into elementary stream files.
+### Building instructions
 
-  ./test/
-   - Contains unit test executables and Unittest system tests of the package.
-  
-## Library Features:
+#### Using the makefiles (on Linux)
 
-  * Single pass demuxing for fragmented or unfragmented files
-  * API providing access to demux, trackreader, and box reader (navigator)
-    objects, all multi-instantiable
-  * Robust implementation to skip unknown boxes, ignore unrecognized content in
-    known boxes, return errors on corrupt data.
-  * Read and demux the following formats:
-      fragmented or unfragmented MP4 File Format(.mp4, .m4a, .m4v)
-  * Extract media samples in the following formats:
-    * Video H.264
-    * Video H.265
-    * Video Dolby Vision
-    * Audio Dolby Digital Plus
-    * Audio Dolby Digital
-    * Audio Dolby AC4
-    * Audio HE AAC v2
-  * Support for edit lists if the mapping between CTS and presentation time
-    is monotonically increasing.
-  * Per sample access to
-    * Decoding Time Stamp (DTS)
-    * Composition Time Stamp (CTS)
-    * Presentation Time Stamp (CTS after applying edit lists)
-    * Sync sample information
-  * Seeking inside fragments or unfragmented movies
-  * Random access to fragments by evaluating 'mfro' and 'mfra' boxes.
-  * Provide access to the following metadata
-    * File type information from 'ftyp' and 'styp' boxes.
-    * Dolby static metadata.
-    * ID3v2 metadata as ID3v2 tag from 'moov/meta/ID32' boxes.
-    * Unfragmented items referenced by 'moov/meta/iloc' and stored in 'moov/meta/idat'.
+    After cloning the dlb_mp4demux repository to your local machine, go to the appropriate directory, depending on your machine OS and architecture, such as:
+    "cd dlb_mp4demux/make/mp4demuxer<architecture>"
 
-## Frontends Sample Code
+    Then build one of the following make targets:
+    "make mp4demuxer_release"
+    "make mp4demuxer_debug"
 
-   mp4demuxer sample frontend to read local fragmented or unfragmented mp4 
-   file format and output elementary streams.
- 
-## KNOWN LIMITATIONS/ISSUES
+#### Using the Visual Studio Solutions(on Windows)
 
-None
+    From a Visual Studio 2010 command line window:
+    Go to a directory of your choice:
+    "cd dlb_mp4demux\make\mp4demuxer\windows<architecture>"
+	"devenv mp4demuxer_2010.sln /rebuild debug/release"
+
+## Release Note
+
+See the [ReleaseNote](ReleaseNote) file for details
+	
+## License
+
+This project is licensed under the BSD-3 License - see the [LICENSE](LICENSE) file for details
