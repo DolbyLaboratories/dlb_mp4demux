@@ -4,7 +4,7 @@ The Dolby MP4 streaming demuxer (dlb_mp4demux) is a software implementation of a
 
 ## Getting Started
 
-These instructions help you get a copy of the project up and running on your local machine for development and testing purposes.
+These instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Folder Structure
 
