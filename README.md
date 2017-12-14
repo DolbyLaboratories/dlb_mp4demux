@@ -1,6 +1,6 @@
 # dlb_mp4demux
 
-The dlb_mp4demux is a library developed by Dolby under the BSD-3 license. The library can cooperate with frontend program to generate a tool to efficiently demultiplex ISO base media file format (aka mp4 container) into elementary streams (including AC3, EC3, AC4 and DoVi).
+The Dolby MP4 streaming demuxer (dlb_mp4demux) is a software implementation of a demuxer of fragmented or unfragmented ISO base media file format (mp4). It supports demuxing of Dolby Digital (AC-3), Dolby Digital Plus (E-AC-3), and Dolby AC-4 audio formats as well as Dolby Vision. It is designed for use on architectures with limited resources.
 
 ## Getting Started
 
@@ -42,7 +42,7 @@ For Windows platform development, Visual Studio 2010 must be installed with SP1.
 
 ## Release Note
 
-See the [ReleaseNote](ReleaseNote) file for details
+See the [Release Notes](ReleaseNotes.md) file for details
 	
 ## License
 
