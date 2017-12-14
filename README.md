@@ -40,7 +40,7 @@ For Windows platform development, Visual Studio 2010 must be installed with SP1.
     "cd dlb_mp4demux\make\mp4demuxer\windows<architecture>"
 	"devenv mp4demuxer_2010.sln /rebuild debug/release"
 
-## Release Note
+## Release Notes
 
 See the [Release Notes](ReleaseNotes.md) file for details
 	
