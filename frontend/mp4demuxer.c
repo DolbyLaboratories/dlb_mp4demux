@@ -689,7 +689,7 @@ static int
 
     CHECK( player_select_movie(data, p_movie) );
 
-    if (data->options.time_ranges.start > 0)
+    if (data->options.time_ranges.start != -1.0f || data->options.time_ranges.end != -1.0f)
     {
         /* presentation time order */
         CHECK( player_play_time_range(data->player,
@@ -711,6 +711,7 @@ static int
 {    
     const mp4d_version_t *version = mp4d_get_version();
 
+    printf("Copyright (c) 2008-2017 Dolby Laboratories, Inc. All Rights Reserved\n");
     if (version->text != NULL)
     {
         logout(LOG_VERBOSE_LVL_INFO,"mp4demuxer version %" PRIu32 ".%" PRIu32 ".%" PRIu32 " %s built: %s\n",
@@ -826,12 +827,24 @@ static int
 {
     int i;
     default_options(options);
+    
+    if (argc == 1)
+    {
+        printf("Error parsing command line, using '-h' for more info.\n");
+        return -1;
+    }
+    
     for(i=1; i < argc; i++)
     {
         const char* option = argv[i];
         if(!strcmp(option, "--input-file")) 
         {
             char ext[10];
+			if (i + 1 >= argc || argv[i + 1][0] == '-'){
+				printf("Error: invalid input file found.\n");
+				return -1;
+			}
+
             options->filename = argv[++i];
 			get_extension(options->filename, ext);
             if (strcmp(ext, ".mp4") && strcmp(ext, ".m4a") && strcmp(ext, ".m4v"))
@@ -841,15 +854,29 @@ static int
         }
         else if (!strcmp(option, "--output-folder"))
         {
+			if (i + 1 >= argc || argv[i + 1][0] == '-'){
+				printf("Error: invalid output folder found.\n");
+				return -1;
+			}
+
             options->output_folder = argv[++i];
         }
         else if (!strcmp(option, "--item"))
         {
+			if (i + 1 >= argc || argv[i + 1][0] == '-'){
+				printf("Error: invalid item found.\n");
+				return -1;
+			}
+
             options->item = argv[++i];
         }
         else if (!strcmp(option, "--time-ranges"))
         {
             char range[20], *tmp;
+			if (i + 1 >= argc || argv[i + 1][0] == '-'){
+				printf("Error: invalid time range found.\n");
+				return -1;
+			}
             strcpy(range, argv[++i]);
             tmp = strtok(range, "-");
             if (tmp)
@@ -883,6 +910,10 @@ static int
         {
             options->show_samples = 1;
         }
+        else if (!strcmp(option, "--version"))
+        {
+            print_version();
+        }
         else if (!strcmp(option, "--verbose"))
         {
 			if (argv[i + 1] && argv[i + 1][0] != '-'){
@@ -905,7 +936,8 @@ static int
         }
         else
         {
-            printf("Skipped: unknown option found: %s\n", option);
+            printf("Error: unknown option found: %s\n", option);
+			return -1;
         }
     }
 
@@ -940,7 +972,6 @@ int
 	int err = 0;
 
 	memset(&data, 0, sizeof(app_data_t));
-	CHECK( print_version() );
 	CHECK( parse_options(argc, argv, &data.options) );
 	if (data.options.filename){
 		CHECK( movie_new(data.options.filename, &p_movie) );
