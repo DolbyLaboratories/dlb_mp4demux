@@ -478,20 +478,14 @@ static int
             }
             else if ((
                 (MP4D_FOURCC_EQ(stream_info.hdlr, "vide") && MP4D_FOURCC_EQ(stream_info.codec, "hvc1")) ||
+                (MP4D_FOURCC_EQ(stream_info.hdlr, "vide") && MP4D_FOURCC_EQ(stream_info.codec, "dvh1")) ||
                 (MP4D_FOURCC_EQ(stream_info.hdlr, "vide") && MP4D_FOURCC_EQ(stream_info.codec, "hev1")) ||
+                (MP4D_FOURCC_EQ(stream_info.hdlr, "vide") && MP4D_FOURCC_EQ(stream_info.codec, "dvhe")) ||
                 (MP4D_FOURCC_EQ(stream_info.hdlr, "vide") && MP4D_FOURCC_EQ(stream_info.codec, "HEVC"))
                 ) &&
                 !p_data->options.raw_dump)
             {
                 CHECK( hevc_writer_new(&sink1, track_ID, stream_name, p_data->options.output_folder, p_data->options.dump_to_stdout) );
-                video_flag = 1;
-            }
-            else if (
-                (MP4D_FOURCC_EQ(stream_info.hdlr, "vide") && (MP4D_FOURCC_EQ(stream_info.codec, "dvav") || (MP4D_FOURCC_EQ(stream_info.codec, "dvhe"))) 
-                ) &&
-                !p_data->options.raw_dump)
-            {
-                CHECK( dv_el_writer_new(&sink1, track_ID, stream_name, (const char *)stream_info.codec, p_data->options.output_folder) );
                 video_flag = 1;
             }
 
@@ -513,6 +507,11 @@ static int
                 {
                     CHECK( ddp_writer_new(&sink1, track_ID, stream_name, p_data->options.output_folder) );
                 }
+                else if ((MP4D_FOURCC_EQ(stream_info.codec, "ac-3") && MP4D_FOURCC_EQ(stream_info.hdlr, "soun"))
+						&& !p_data->options.raw_dump)
+				{
+					CHECK( ddp_writer_new(&sink1, track_ID, "ac-3", p_data->options.output_folder) );
+				}
                 else if(MP4D_FOURCC_EQ(stream_info.hdlr, "subt") || MP4D_FOURCC_EQ(stream_info.codec, "stpp"))
                 {
                     CHECK( subt_writer_new(&sink1, track_ID, stream_name, p_data->options.output_folder) );

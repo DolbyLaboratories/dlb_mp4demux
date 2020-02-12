@@ -171,6 +171,7 @@ ddp_writer_new(es_sink_t *p_es_sink, uint32_t track_ID, const char *stream_name,
 {
     es_writer_t p_es_writer;
     int err = 0;
+    int filename_flag = 0;
 
     *p_es_sink = malloc(sizeof(struct es_writer_t_));
     (*p_es_sink)->sample_ready = es_writer_sample_ready;
@@ -191,16 +192,46 @@ ddp_writer_new(es_sink_t *p_es_sink, uint32_t track_ID, const char *stream_name,
             folder_len = (int)strlen(output_folder);
             n -=  folder_len;
         }
-        
-        if (track_ID > 0)
+        if (folder_len)
         {
-            ASSURE( snprintf(filename + folder_len, n, "out_%" PRIu32 ".ec3", track_ID) < n,
-                    (" "));
+            if ((output_folder[folder_len - 1] != '\\') && (output_folder[folder_len - 1] != '/'))
+            {
+                filename_flag = 1;
+            }
+        }
+        if (!filename_flag)
+        {
+            if (track_ID >   0)
+            {
+                if (stream_name)
+                {
+                    ASSURE( snprintf(filename + folder_len, n, "out_%" PRIu32 "%s", track_ID, (MP4D_FOURCC_EQ(stream_name, "ac-3")) ? ".ac3" : ".ec3") < n,
+                            (" "));
+                }
+                else
+                {
+                     ASSURE( snprintf(filename + folder_len, n, "out_%" PRIu32 ".ec3", track_ID) < n,
+                        (" "));
+                }
+            }
+            else
+            {
+                ASSURE( snprintf(filename + folder_len, n, "%s%s", stream_name,(MP4D_FOURCC_EQ(stream_name, "ac-3")) ? ".ac3" : ".ec3") < n,
+                        (" "));
+            }
         }
         else
         {
-            ASSURE( snprintf(filename + folder_len, n, "%s.ec3", stream_name) < n,
-                    (" "));
+            if (stream_name)
+            {
+                ASSURE( snprintf(filename + folder_len, n, PRIu32 "%s", (MP4D_FOURCC_EQ(stream_name, "ac-3")) ? ".ac3" : ".ec3") < n,
+                        (" "));
+            }
+            else
+            {
+                 ASSURE( snprintf(filename + folder_len, n, "%s", ".ec3", track_ID) < n,
+                        (" "));
+            }
         }
         p_es_writer->out_file = fopen(filename, "wb");
         ASSURE( p_es_writer->out_file != NULL, ("Failed to open %s for writing", filename) );
@@ -745,12 +776,12 @@ int adts_writer_new(es_sink_t *p_es_sink, uint32_t track_ID, const char *stream_
         
         if (track_ID > 0)
         {
-            ASSURE( snprintf(filename + folder_len, n, "out_%" PRIu32 ".adts", track_ID) < n,
+            ASSURE( snprintf(filename + folder_len, n, "out_%" PRIu32 ".aac", track_ID) < n,
                     (" "));
         }
         else
         {
-            ASSURE( snprintf(filename + folder_len, n, "%s.adts", stream_name) < n,
+            ASSURE( snprintf(filename + folder_len, n, "%s.aac", stream_name) < n,
                     (" "));
         }
         p_adts_writer->out_file = fopen(filename, "wb");
