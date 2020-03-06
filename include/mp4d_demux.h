@@ -48,7 +48,7 @@ extern "C" {
  */
 #define MP4D_VERSION_MAJOR 1
 #define MP4D_VERSION_MINOR 0
-#define MP4D_VERSION_PATCH 0
+#define MP4D_VERSION_PATCH 1
 
 /**
  * @brief Runtime version info
