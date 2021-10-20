@@ -225,7 +225,7 @@ play(player_t p_d,
                         es_sink_t sink = p_d->streams[i].sink[j];
                         uint32_t k;
                         unsigned char *subsample_payload = p_d->streams[i].data;
-
+                        logout(LOG_VERBOSE_LVL_INFO,"sub_sample %d\n",sample->num_subsamples);
                         if (sample->num_subsamples == 1)
                         {
                             CHECK( sink_sample_ready(sink, sample, p_d->streams[i].data) );
