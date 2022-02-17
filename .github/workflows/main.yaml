@@ -7,7 +7,6 @@ on:
 env:
   FUZZING_SERVER_ADDRESS: app.code-intelligence.com:6773
   WEB_APP_ADDRESS:  https://app.code-intelligence.com
-  PROJECT_ID: projects/organizations_89d295318b3fded6_zint_git-f0f07698
 
 
 jobs:
