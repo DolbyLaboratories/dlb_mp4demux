@@ -1,0 +1,52 @@
+## Configuration of a CI Fuzz test
+## Generated on 2022-01-25 with CI Fuzz 2.27.0
+##
+## Lines that start with "##" are explanations for the following
+## setting, lines that start with "#" are settings that can be enabled
+## by removing the "#".
+##
+## Settings in this file override settings in the project.yaml.
+
+## The fuzz target type. If unspecified, the type is derived from the
+## extension of the fuzz target source file.
+type: "c++"
+
+## Additional arguments to pass to the compiler when building the
+## fuzz target.
+compiler_extra_args:
+  - "-Iinclude"
+  - "make/mp4d/linux_amd64/mp4d_debug.a"
+
+## Additional arguments to pass to the fuzz target when it is executed.
+## Note that any relative paths are resolved relative to the root of the
+## project directory.
+#run_extra_args:
+#  - "-c myapp.conf"
+
+## Options to pass to the fuzzing engine.
+engine_options:
+ libfuzzer:
+   - -timeout=120
+
+## Environment variables to set when executing the target.
+#environment:
+#  - ASAN_OPTIONS=detect_leaks=0
+
+## If set to true, do not use the generic input corpus for this
+## fuzz target.
+#no_initial_corpus: false
+
+##### This section is only for Java fuzz targets #####
+
+## Autofuzz target definition. 
+## Fully qualified method reference with an optional signature to a Jazzer autofuzz target. 
+## Stated targets have to be available in the referenced artifacts.
+#autofuzz_target: "com.example.MyClass::myMethod(java.lang.String)"
+
+## Package filters to apply when instrumenting the source code.
+#instrumentation_filters:
+#  - com.my_company
+
+## List of jar dependencies needed by the fuzz target.
+#jars:
+#  - target/library_under_test-1.0.jar
