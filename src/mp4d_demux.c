@@ -226,7 +226,11 @@ mp4d_parse_moov
     {
         err = (mp4d_error_t)mp4d_next_atom(&p, &atom, &child);
         if (err) return err;
-        err = (mp4d_error_t)mp4d_dispatch(child, p_nav);
+        if (MP4D_FOURCC_EQ(child.type, "mvhd") || MP4D_FOURCC_EQ(child.type, "meta") ||
+          MP4D_FOURCC_EQ(child.type, "trak") || MP4D_FOURCC_EQ(child.type, "mvex") ||
+          MP4D_FOURCC_EQ(child.type, "udta")) {
+          err = (mp4d_error_t)mp4d_dispatch(child, p_nav);
+        }
 
         if (MP4D_FOURCC_EQ(child.type, "meta")) {
             p_dmux->curr.moov.meta = p_dmux->meta;
@@ -421,12 +425,14 @@ mp4d_parse_hdlr
 
     version = mp4d_read_u8(&p);
     flags = mp4d_read_u24(&p);
-
-    if (MP4D_FOURCC_EQ(atom.p_parent->type, "minf"))
+    if (atom.p_parent != NULL)
     {
+      if (MP4D_FOURCC_EQ(atom.p_parent->type, "minf"))
+      {
         /* Already got the handler type from mdia:hdlr,
            do not overwrite with minf:hdlr (relevant for QuickTime) */
         return 0;
+      }
     }
 
     if (version==0) {
@@ -783,6 +789,7 @@ mp4d_parse_audio
     reserved16 = mp4d_read_u16(&p); /* revision level */
     reserved32 = mp4d_read_u32(&p); /* vendor */
     channelcount = mp4d_read_u16(&p);
+    ASSURE(channelcount != 0, MP4D_E_INVALID_ATOM, ("Incorrect channelcount %" PRIu16, channelcount));
     samplesize = mp4d_read_u16(&p);
     reserved16 = mp4d_read_u16(&p); /* compression ID */
     reserved16 = mp4d_read_u16(&p); /* packet size */
@@ -967,6 +974,8 @@ mp4d_parse_stsd
 
     if (version==0) {
         entry_count = mp4d_read_u32(&p);
+        // support at most 2 sample description, for the case of clearlead in encrypted sample
+        if (entry_count > 2) return MP4D_E_UNSUPPRTED_FORMAT;
         if (p.size==(uint64_t)-1)
             return MP4D_E_INVALID_ATOM;
         atom.p_data += 8;
@@ -1142,7 +1151,9 @@ mp4d_parse_meta
     uint32_t flags;
     
     version = mp4d_read_u8(&p);
+    ASSURE(version != (uint8_t)-1, MP4D_E_BUFFER_TOO_SMALL, ("Incorrect version %" PRIu8, version));
     flags = mp4d_read_u24(&p);
+    ASSURE(flags != (uint32_t)-1, MP4D_E_BUFFER_TOO_SMALL, ("Incorrect flags %" PRIu32, flags));
     
     if (version==0) {
         atom.p_data = p.p_data;
@@ -1933,7 +1944,7 @@ mp4d_demuxer_get_meta_item
     )
 {
     static const mp4d_callback_t cb[] = {
-        {"moov", mp4d_parse_box},
+        {"moov", mp4d_parse_moov},
         {"meta", mp4d_parse_meta_iloc},
         {"idat", mp4d_parse_idat},
         {"iloc", mp4d_parse_iloc},
@@ -2068,7 +2079,7 @@ mp4d_demuxer_get_id3v2_tag
     )
 {
     static const mp4d_callback_t cb[] = {
-        {"moov", mp4d_parse_box},
+        {"moov", mp4d_parse_moov},
         {"meta", mp4d_parse_meta},
         {"dumy", NULL}
     };

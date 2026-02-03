@@ -102,9 +102,12 @@ mp4d_tts_get_ctts_next(tts_reader_t *p_r, uint32_t *p_ts)
         uint64_t ts;
         mp4d_error_t err = mp4d_tts_get_ts(p_r, p_r->next_sample_index, &ts, NULL);
 
+        if (err != MP4D_NO_ERROR) {
+          return err;
+        }
         *p_ts = (uint32_t) ts;  /* safe: is uint32_t for ctts */
 
-        return err;
+        return MP4D_NO_ERROR;
     }
 }
 
@@ -368,6 +371,11 @@ mp4d_stsc_init(stsc_reader_t *p_r, mp4d_atom_t *p_stsc)
     
     p_r->entry_count = mp4d_read_u32(&p_r->buffer);
 
+    // make sure entry count readed correctly
+    ASSURE(p_r->entry_count != (uint32_t)-1, MP4D_E_BUFFER_TOO_SMALL, ("Incorrect entry count %" PRIu32, p_r->entry_count));
+    // make sure buffer size matching with entry count
+    ASSURE((uint64_t)p_r->entry_count * 12 == p_r->buffer.size, MP4D_E_INVALID_ATOM, ("buffer size not correct %" PRIu64, p_r->buffer.size));
+
     if (p_r->entry_count >= 1)
     {
         /* Peek the first entry */
@@ -516,7 +524,11 @@ mp4d_stss_init(stss_reader_t *p_r,
     }
 
     p_r->entries_left = mp4d_read_u32(&p_r->buffer);
-    p_r->count = p_r->entries_left; 
+    p_r->count = p_r->entries_left;
+
+    ASSURE(p_r->entries_left != (uint32_t)-1, MP4D_E_BUFFER_TOO_SMALL, ("Unknown entry count %" PRIu32, p_r->entries_left));
+    ASSURE((uint64_t)p_r->entries_left * 4 == p_r->buffer.size, MP4D_E_INVALID_ATOM, ("buffer size not correct %" PRIu64, p_r->buffer.size));
+
     if (p_r->count != 0)
     {
         p_r->stts_content = (unsigned char*)malloc(4*p_r->count);
